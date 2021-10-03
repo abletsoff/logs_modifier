@@ -13,8 +13,10 @@ optional arguments:
     -6, --ipv6            obfuscate IPv6 addresses
     -H, --hash            obfuscate salted hashes
     -p, --print           print result to stdout
-    -r REGEX, --regex     REGEX user defined regex to obfuscate
-    -P PASS_REGEX,        --pass_regex PASS_REGEX user defined regex to not obfuscate 
+    -r REGEX, --regex     REGEX 
+                          user defined regex to obfuscate
+    -P PASS_REGEX, --pass_regex PASS_REGEX 
+                          user defined regex to not obfuscate 
 </pre>
 
 # PoC

@@ -24,3 +24,5 @@ optional arguments:
   python3 logs_obfuscator.py -4 -m ifconfig.log
   vimdiff ifconfig.log ifconfig.log.obfuscated 
 </pre>
+# Screenshot
+![alt text](https://github.com/abletsoff/logs_obfuscator/blob/main/PoC.png?raw=true)

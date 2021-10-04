@@ -1,10 +1,11 @@
 import re
 import sys
 import argparse
+import logging
 
 #=== TODO: Add Salted hash regular expressions
 
-def substitution(data, regex_str, name, excl_regex_str):
+def substitution(data, regex_str, name, excl_regex_str, detailed=False):
     
     regex = re.compile(regex_str)
     excl_regex = re.compile(excl_regex_str)
@@ -37,8 +38,10 @@ def substitution(data, regex_str, name, excl_regex_str):
     for (left, right), value in dictionary.items():
         if value not in indexed:
             indexed[value] = str(len(indexed) + 1) 
-
-        data = data[:left] + (name + '_' + indexed[value]).center(right - left, '*') + data[right:]
+        sub_value = (name + '_' + indexed[value]).center(right - left, '*')         
+        data = data[:left] + sub_value + data[right:]
+        if detailed == True:
+            print('\t', value, '=>', sub_value)
 
     return data
 
@@ -52,7 +55,7 @@ def arg_parser():
     parser.add_argument('-p', '--print', action='store_true', help='print result to stdout')
     parser.add_argument('-r', '--regex', action='store', help="user defined regex to obfuscate")
     parser.add_argument('-P', '--pass_regex', action='store', help="user defined regex to not obfuscate")
-
+    parser.add_argument('-d', '--detail', action='store_true', help="display information about obfuscated values")
     parser.add_argument('files', metavar='FILE', type=str, nargs='+', help='file for obfuscation')
 
     return parser.parse_args()
@@ -112,17 +115,18 @@ for file_name in args.files:
     
     if args.pass_regex == None:
         args.pass_regex = r'$a'
-
+    if args.detail == True:
+        print('Substitutions: ')
     if args.mac == True: 
-        data = substitution(data, regex_MAC, 'MAC', r'(' + regex_MAC_excl + r')|(' + args.pass_regex + r')') 
+        data = substitution(data, regex_MAC, 'MAC', r'(' + regex_MAC_excl + r')|(' + args.pass_regex + r')', args.detail) 
     if args.ipv4 == True: 
-        data = substitution(data, regex_IPv4, 'IPv4', r'(' + regex_IPv4_excl + r')|(' + args.pass_regex + r')') 
+        data = substitution(data, regex_IPv4, 'IPv4', r'(' + regex_IPv4_excl + r')|(' + args.pass_regex + r')', args.detail) 
     if args.ipv6 == True: 
-        data = substitution(data, regex_IPv6, 'IPv6', r'(' + regex_IPv6_excl + r')|(' + args.pass_regex + r')') 
+        data = substitution(data, regex_IPv6, 'IPv6', r'(' + regex_IPv6_excl + r')|(' + args.pass_regex + r')', args.detail) 
     if args.hash == True: 
-        data = substitution(data, regex_Salted_Hashes, 'Salted_Hash', args.pass_regex) 
+        data = substitution(data, regex_Salted_Hashes, 'Salted_Hash', args.pass_regex, args.detail)  
     if args.regex != None:
-        data = substitution(data, args.regex, 'U', args.pass_regex)
+        data = substitution(data, args.regex, 'U', args.pass_regex, args.detail) 
     if args.print == True:
         print(data)
 

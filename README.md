@@ -1,4 +1,4 @@
-# logs_obfuscator
+# logs_modifier
 Script for removing confidential information from events logs before sending them to technical support
 
 # Functionality

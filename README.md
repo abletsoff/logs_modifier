@@ -22,7 +22,7 @@ optional arguments:
 
 </pre>
 
-# PoC
+# Usage
 
 <pre>
   ifconfig > ifconfig.log

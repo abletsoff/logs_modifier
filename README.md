@@ -5,7 +5,7 @@ Script for removing confidential information from events logs before sending the
 <pre> 
 
 positional arguments:
-  FILE                  file for modification
+  PATH                  path for modification procedures
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -19,6 +19,7 @@ optional arguments:
   -P PASS_REGEX, --pass_regex PASS_REGEX
                         user defined regex to not modify
   -d, --detail          display information about modified values
+  -R, --remove          remove original file
 
 </pre>
 

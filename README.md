@@ -32,4 +32,4 @@ optional arguments:
 </pre>
 
 # PoC
-![alt text](https://github.com/abletsoff/logs_modifier/blob/main/PoC.png?raw=true)
+![PoC](https://github.com/abletsoff/logs_modifier/blob/main/PoC.png?raw=true)

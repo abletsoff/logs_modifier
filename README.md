@@ -30,5 +30,6 @@ optional arguments:
   python3 logs_modifier.py -4 -m ifconfig.log
   vimdiff ifconfig.log ifconfig.log.modified 
 </pre>
-# Screenshot
+
+# PoC
 ![alt text](https://github.com/abletsoff/logs_modifier/blob/main/PoC.png?raw=true)

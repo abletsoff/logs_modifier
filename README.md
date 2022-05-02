@@ -31,5 +31,5 @@ optional arguments:
   vimdiff ifconfig.log ifconfig.log.modified 
 </pre>
 
-# PoC
+# Example
 ![PoC](https://github.com/abletsoff/logs_modifier/blob/main/PoC.png?raw=true)

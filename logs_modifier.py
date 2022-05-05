@@ -50,34 +50,44 @@ def arg_parser():
     return parser.parse_args()
     
 def modify_file(file_name, args):
-    f = open(file_name)
-    data = f.read()
-    f.close()
-   
-    if args.remove == True:
-        os.remove(file_name)
-    if args.pass_regex == None:
-        args.pass_regex = r'$a'
-    if args.detail == True:
-        print('Substitutions: ')
-    if args.mac == True: 
-        data = substitution(data, regex_MAC, 'MAC', rf'({regex_MAC_excl})|({args.pass_regex})', args.detail) 
-    if args.ipv4 == True: 
-        data = substitution(data, regex_IPv4, 'IPv4', rf'({regex_IPv4_excl})|({args.pass_regex})', args.detail) 
-    if args.ipv6 == True: 
-        data = substitution(data, regex_IPv6, 'IPv6', rf'({regex_IPv6_excl})|({args.pass_regex})', args.detail) 
-    if args.hash == True: 
-        data = substitution(data, regex_Salted_Hashes, 'Salted_Hash', args.pass_regex, args.detail)  
-    if args.regex != None:
-        data = substitution(data, args.regex, 'U', args.pass_regex, args.detail) 
-    if args.detail == True:
-        print()
-    if args.print == True:
-        print(data)
     
-    f = open(file_name + '.modified', "w")
-    f.write(data)
-    f.close
+    try:
+        f = open(file_name)
+        try: 
+            data = f.read()
+        except UnicodeDecodeError as excp:
+            print(f'UnicodeDecodeError: {file_name}')
+            f.close()
+            return
+        f.close()
+   
+        if args.remove == True:
+            os.remove(file_name)
+        if args.pass_regex == None:
+            args.pass_regex = r'$a'
+        if args.detail == True:
+            print('Substitutions: ')
+        if args.mac == True: 
+            data = substitution(data, regex_MAC, 'MAC', rf'({regex_MAC_excl})|({args.pass_regex})', args.detail) 
+        if args.ipv4 == True: 
+            data = substitution(data, regex_IPv4, 'IPv4', rf'({regex_IPv4_excl})|({args.pass_regex})', args.detail) 
+        if args.ipv6 == True: 
+            data = substitution(data, regex_IPv6, 'IPv6', rf'({regex_IPv6_excl})|({args.pass_regex})', args.detail) 
+        if args.hash == True: 
+            data = substitution(data, regex_Salted_Hashes, 'Salted_Hash', args.pass_regex, args.detail)  
+        if args.regex != None:
+            data = substitution(data, args.regex, 'U', args.pass_regex, args.detail) 
+        if args.detail == True:
+            print()
+        if args.print == True:
+            print(data)
+        
+        f = open(file_name + '.modified', "w")
+        f.write(data)
+        f.close
+
+    except PermissionError as excp:
+        print(excp)
 
 # =============== Regular Expressions ===============
 
@@ -127,9 +137,3 @@ for path in args.path:
 
     except FileNotFoundError as excp:
         print(excp)
-    
-    except PermissionError as excp:
-        print(excp)
-    
-    except UnicodeDecodeError as excp:
-        print(f'UnicodeDecodeError: {root}/{f_name}')

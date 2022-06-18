@@ -5,7 +5,7 @@ import re
 import sys
 import argparse
 
-#=== TODO: Add Salted hash regular expressions
+comment=" File has been modified according to the github project (https://github.com/abletsoff/logs_modifier) "
 
 # =============== Functions ===============
 
@@ -21,7 +21,7 @@ def substitution(data, regex_str, name, excl_regex_str, detailed=False):
     excl_values = {(x.group(0), x.span()) for x in re.finditer(excl_regex, data)}
     mod_values = match_values - excl_values
 
-    indexed = {}
+    indexed = {} # substitutions tracker
 
     for value, (left, right) in sorted(mod_values, key=lambda var: var[1][0]):
         if value not in indexed:
@@ -64,9 +64,9 @@ def modify_file(file_name, args):
         if args.remove == True:
             os.remove(file_name)
         if args.pass_regex == None:
-            args.pass_regex = r'$a'
+            args.pass_regex = r'$a'     # meaningless regex 
         if args.detail == True:
-            print('Substitutions: ')
+            print(f"Substitutions in '{file_name}': ")
         if args.mac == True: 
             data = substitution(data, regex_MAC, 'MAC', rf'({regex_MAC_excl})|({args.pass_regex})', args.detail) 
         if args.ipv4 == True: 
@@ -83,6 +83,9 @@ def modify_file(file_name, args):
             print(data)
         
         f = open(file_name + '.modified', "w")
+        f.write('#' + '-' * len(comment) + '#\n')
+        f.write('#' + comment + '#\n')
+        f.write('#' + '-' * len(comment) + '#\n\n')
         f.write(data)
         f.close
 
@@ -91,15 +94,15 @@ def modify_file(file_name, args):
 
 # =============== Regular Expressions ===============
 
-regex_MAC = (   r'(([0-9a-fA-F]{2}[:.]){5}'
+regex_MAC = (   r'(([0-9a-fA-F]{2}[:.-]){5}'
                 r'[0-9a-fA-F]{2})|'
-                r'(([0-9a-fA-F]{4}[:.]){2}'
+                r'(([0-9a-fA-F]{4}[-.]){2}'
                 r'[0-9a-fA-F]{4})')
 
 # Exclude Broadcast MAC address from substitution
-regex_MAC_excl = (  r'(([fF]{2}[:.]){5}'
+regex_MAC_excl = (  r'(([fF]{2}[:.-]){5}'
                     r'[fF]{2})|'
-                    r'(([fF]{4}[:.]){2}'
+                    r'(([fF]{4}[-.]){2}'
                     r'[fF]{4})')
 
 
